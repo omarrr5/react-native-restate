@@ -21,13 +21,14 @@ export const account = new Account(client);
 export async function login() {
   try {
     const redirectUri = Linking.createURL("/");
-
+    
     const response = await account.createOAuth2Token(
-      OAuthProvider.Google,
-      redirectUri
-    );
+        OAuthProvider.Google,
+        redirectUri
+      );
+    if (!response) throw new Error("Create OAuth2 token failed");
 
-    if (!response) throw new Error("Failed to Login");
+
     const browserResult = await openAuthSessionAsync(
       response.toString(),
       redirectUri
@@ -60,7 +61,7 @@ export async function logout() {
     }
 }
 
-export async function getUser() {
+export async function getCurrentUser() {
     try {   
         const response = await account.get();
         if(response.$id) {
